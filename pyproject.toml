@@ -1,0 +1,9 @@
+[project]
+name = "baltimore-vacants"
+version = "0.1.0"
+description = "exploration of who owns vacant homes in Baltimore city"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "marimo[recommended]>=0.14.6",
+]
