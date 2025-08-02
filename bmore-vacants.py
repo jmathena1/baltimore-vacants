@@ -23,36 +23,14 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
-    vacant_houses = mo.sql(
-        f"""
-        select * from 'raw-data/vacant_building_notices.csv'
-        """,
-        output=False
-    )
-    return (vacant_houses,)
-
-
-@app.cell
-def _(mo):
-    real_property_data = mo.sql(
-        f"""
-        select * from 'raw-data/real_property_data.csv'
-        """,
-        output=False
-    )
-    return (real_property_data,)
-
-
-@app.cell
-def _(mo, real_property_data, vacant_houses):
+def _(mo, real_property_data_df, vacant_building_notices_df):
     vacant_houses_with_owners = mo.sql(
         f"""
         select
             v.*,
             r.*
-        from vacant_houses as v
-        left join real_property_data as r on v."BLOCKLOT" = r."BLOCKLOT"
+        from vacant_building_notices_df as v
+        left join real_property_data_df as r on v."BLOCKLOT" = r."BLOCKLOT"
         """,
         output=False
     )
@@ -69,8 +47,7 @@ def _(mo, vacant_houses_with_owners):
         from vacant_houses_with_owners
         group by "BLOCKLOT"
         order by real_property_count desc
-        """,
-        output=False
+        """
     )
     return
 
@@ -245,10 +222,18 @@ def _(mo):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _():
     import marimo as mo
-    return (mo,)
+    import polars as pl
+
+    data_path = mo.notebook_location() / "raw-data"
+    vacant_building_notices_df = pl.read_csv(str(data_path / "vacant_building_notices.csv"))
+    real_property_data_df = pl.read_csv(
+        str(data_path / "real_property_data.csv"),
+        infer_schema_length=10000
+    )
+    return mo, real_property_data_df, vacant_building_notices_df
 
 
 if __name__ == "__main__":

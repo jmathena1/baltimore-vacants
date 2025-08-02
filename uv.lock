@@ -57,6 +57,7 @@ dependencies = [
     { name = "marimo", extra = ["recommended", "sql"] },
     { name = "matplotlib" },
     { name = "numpy" },
+    { name = "polars" },
 ]
 
 [package.metadata]
@@ -64,6 +65,7 @@ requires-dist = [
     { name = "marimo", extras = ["recommended", "sql"], specifier = ">=0.14.6" },
     { name = "matplotlib", specifier = ">=3.10.5" },
     { name = "numpy", specifier = ">=2.3.2" },
+    { name = "polars", specifier = ">=1.31.0" },
 ]
 
 [[package]]
