@@ -10,7 +10,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     There are about 12,500 vacant homes in Baltimore City, according to the Mayor's office. 
@@ -19,18 +19,6 @@ def _(mo):
 
     So who owns the rest? 
     """).callout(kind='neutral')
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(
-        r"""
-
-
-    Thanks to Open Baltimore data, we can filter the [Vacant Building Notices](https://data.baltimorecity.gov/datasets/691d65a5f85640e6aaa46930bd9dc102_1/explore?location=39.296383%2C-76.620458%2C11.51&showTable=true) (VBNs) dataset with the city's [Real Property Information](https://data.baltimorecity.gov/datasets/baltimore::real-property-information-2/explore?location=39.294088%2C-76.628072%2C14.18&showTable=true) to gather mailing addresses on file for all vacant homes.
-    """
-    )
     return
 
 
@@ -81,16 +69,19 @@ def _(mo, vacant_houses_with_owners):
         from vacant_houses_with_owners
         group by "BLOCKLOT"
         order by real_property_count desc
-        """
+        """,
+        output=False
     )
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
     ## Data Collection and Wrangling
+    Thanks to Open Baltimore data, we can filter the [Vacant Building Notices](https://data.baltimorecity.gov/datasets/691d65a5f85640e6aaa46930bd9dc102_1/explore?location=39.296383%2C-76.620458%2C11.51&showTable=true) (VBNs) dataset with the city's [Real Property Information](https://data.baltimorecity.gov/datasets/baltimore::real-property-information-2/explore?location=39.294088%2C-76.628072%2C14.18&showTable=true) to gather mailing addresses on file for all vacant homes.
+
 
     I downloaded the VBNs and Real Property data as CSVs to make my life easier, and because those datasets aren't updated that often. I downloaded them both on 6/27/2025. 
 
@@ -193,7 +184,7 @@ def _(bmore_vacant_owners, vacant_houses_with_owners):
     return bmore_vacant_owners_count, local_ownership_rate
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         rf"""
@@ -209,7 +200,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(bmore_vacant_owners_count, local_ownership_rate, mo):
     mo.md(f"""
     **So by my count, {bmore_vacant_owners_count} vacant houses in Baltimore are owned by an entity with a mailing address nearby.**
@@ -219,7 +210,7 @@ def _(bmore_vacant_owners_count, local_ownership_rate, mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -241,7 +232,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -254,7 +245,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     import marimo as mo
     return (mo,)
