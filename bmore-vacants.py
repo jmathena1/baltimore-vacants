@@ -211,11 +211,12 @@ def _():
     import marimo as mo
     import polars as pl
 
-    data_path = mo.notebook_location() / "raw-data"
+    data_path = mo.notebook_location() / "public"
     vacant_houses_with_owners_df = pl.read_csv(
         str(data_path / "vacant_houses_with_owners.csv"),
         truncate_ragged_lines=True
     )
+    vacant_houses_with_owners_df.head()
     return mo, vacant_houses_with_owners_df
 
 

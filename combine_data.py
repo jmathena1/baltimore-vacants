@@ -15,7 +15,7 @@ def _():
     import marimo as mo
     import polars as pl
 
-    data_path = mo.notebook_location() / "raw-data"
+    data_path = mo.notebook_location() / "public"
     vacant_building_notices_df = pl.read_csv(str(data_path / "vacant_building_notices.csv"))
     real_property_data_df = pl.read_csv(
         str(data_path / "real_property_data.csv"),
