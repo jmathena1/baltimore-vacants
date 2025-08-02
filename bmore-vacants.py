@@ -24,7 +24,7 @@ def _(mo):
 
 @app.cell
 def _(mo, vacant_houses_with_owners_df):
-    _df = mo.sql(
+    blklotcount_df = mo.sql(
         f"""
         select
         v."BLOCKLOT",
@@ -32,7 +32,8 @@ def _(mo, vacant_houses_with_owners_df):
         from vacant_houses_with_owners_df as v
         group by v."BLOCKLOT"
         order by real_property_count desc
-        """
+        """,
+        output=False
     )
     return
 
@@ -131,7 +132,8 @@ def _(mo, vacant_houses_with_owners_df):
             '21297',
             '21298'
             )
-        """
+        """,
+        output=False
     )
     return (bmore_vacant_owners,)
 
@@ -216,7 +218,6 @@ def _():
         str(data_path / "vacant_houses_with_owners.csv"),
         truncate_ragged_lines=True
     )
-    vacant_houses_with_owners_df.head()
     return mo, vacant_houses_with_owners_df
 
 
