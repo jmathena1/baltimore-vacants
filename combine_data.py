@@ -26,8 +26,7 @@ def _():
         on="BLOCKLOT",
         how="left"
     )
-
-    vacant_houses_with_owners_df.write_csv(str(data_path / "vacant_houses_with_owners.csv"), separator=",")
+    vacant_houses_with_owners_df.write_csv(str(data_path / "vacant_houses_with_owners.csv"))
     return (mo,)
 
 

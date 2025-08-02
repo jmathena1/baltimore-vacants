@@ -51,7 +51,7 @@ def _(mo):
 
     I read the two CSVs into Polars Dataframes and joined them on the `BLOCKLOT` column. I did that in another notebook stored in the same GitHub repository as this one.
 
-    I noticed that there were more records on my resulting dataset after the join. So I ran a query to count how many times each block lot appeared in the combined dataset with vacant houses and addresses. I counted 7 block lots that appear more than once in the real property records. My guess is that these properties have apartments, are mixed use, or have ADUs on the block lot. 
+    I noticed that there were more records on my resulting dataset after the join. So I ran a query to count how many times each block lot appeared in the combined dataset with vacant houses and addresses. I counted 7 block lots that appear more than once in the real property records. My guess is that these properties have apartments, are mixed use, or have ADUs on the block lot.
     """
     )
     return
@@ -131,8 +131,7 @@ def _(mo, vacant_houses_with_owners_df):
             '21297',
             '21298'
             )
-        """,
-        output=False
+        """
     )
     return (bmore_vacant_owners,)
 
