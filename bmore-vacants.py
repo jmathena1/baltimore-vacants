@@ -27,10 +27,10 @@ def _(mo, vacant_houses_with_owners_df):
     _df = mo.sql(
         f"""
         select
-        "BLOCKLOT",
-        count("BLOCKLOT") as real_property_count
-        from vacant_houses_with_owners_df
-        group by "BLOCKLOT"
+        v."BLOCKLOT",
+        count(v."BLOCKLOT") as real_property_count
+        from vacant_houses_with_owners_df as v
+        group by v."BLOCKLOT"
         order by real_property_count desc
         """
     )
@@ -62,11 +62,11 @@ def _(mo, vacant_houses_with_owners_df):
     bmore_vacant_owners = mo.sql(
         f"""
         select 
-            "NoticeNum",
-            "MAILTOADD",
-            substr("MAILTOADD", -5) as mailingZip,
-            regexp_matches(vacant_houses_with_owners_df."MAILTOADD", 'P.*\\s*O.*\\s*BOX') as poBox
-        from vacant_houses_with_owners_df
+            v."NoticeNum",
+            v."MAILTOADD",
+            substr(v."MAILTOADD", -5) as mailingZip,
+            regexp_matches(v."MAILTOADD", 'P.*\\s*O.*\\s*BOX') as poBox
+        from vacant_houses_with_owners_df as v
         where
             poBox = false
             and mailingZip in (
