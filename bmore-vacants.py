@@ -213,7 +213,10 @@ def _():
     import polars as pl
 
     data_path = mo.notebook_location() / "raw-data"
-    vacant_houses_with_owners_df = pl.read_csv(str(data_path / "vacant_houses_with_owners.csv"))
+    vacant_houses_with_owners_df = pl.read_csv(
+        str(data_path / "vacant_houses_with_owners.csv"),
+        truncate_ragged_lines=True
+    )
     return mo, vacant_houses_with_owners_df
 
 
