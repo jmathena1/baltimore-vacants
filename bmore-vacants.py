@@ -23,28 +23,13 @@ def _(mo):
 
 
 @app.cell
-def _(mo, real_property_data_df, vacant_building_notices_df):
-    vacant_houses_with_owners = mo.sql(
-        f"""
-        select
-            v.*,
-            r.*
-        from vacant_building_notices_df as v
-        left join real_property_data_df as r on v."BLOCKLOT" = r."BLOCKLOT"
-        """,
-        output=False
-    )
-    return (vacant_houses_with_owners,)
-
-
-@app.cell
-def _(mo, vacant_houses_with_owners):
+def _(mo, vacant_houses_with_owners_df):
     _df = mo.sql(
         f"""
         select
         "BLOCKLOT",
         count("BLOCKLOT") as real_property_count
-        from vacant_houses_with_owners
+        from vacant_houses_with_owners_df
         group by "BLOCKLOT"
         order by real_property_count desc
         """
@@ -64,7 +49,7 @@ def _(mo):
 
     The real property data is very wide (~200 columns, I think?), so I only kept the mailing address and block lot columns; the block lot is shared between datasets and allows me to connect a vacant home to an owner (or at least a mailbox where someone can reach the owner).
 
-    In the above 3 cells, I read the two CSVs into DuckDB tables and join them on the `BLOCKLOT` column.
+    I read the two CSVs into Polars Dataframes and joined them on the `BLOCKLOT` column. I did that in another notebook stored in the same GitHub repository as this one.
 
     I noticed that there were more records on my resulting dataset after the join. So I ran a query to count how many times each block lot appeared in the combined dataset with vacant houses and addresses. I counted 7 block lots that appear more than once in the real property records. My guess is that these properties have apartments, are mixed use, or have ADUs on the block lot. 
     """
@@ -73,15 +58,15 @@ def _(mo):
 
 
 @app.cell
-def _(mo, vacant_houses_with_owners):
+def _(mo, vacant_houses_with_owners_df):
     bmore_vacant_owners = mo.sql(
         f"""
         select 
             "NoticeNum",
             "MAILTOADD",
             substr("MAILTOADD", -5) as mailingZip,
-            regexp_matches(vacant_houses_with_owners."MAILTOADD", 'P.*\\s*O.*\\s*BOX') as poBox
-        from vacant_houses_with_owners
+            regexp_matches(vacant_houses_with_owners_df."MAILTOADD", 'P.*\\s*O.*\\s*BOX') as poBox
+        from vacant_houses_with_owners_df
         where
             poBox = false
             and mailingZip in (
@@ -153,8 +138,8 @@ def _(mo, vacant_houses_with_owners):
 
 
 @app.cell
-def _(bmore_vacant_owners, vacant_houses_with_owners):
-    total_vacant_owners_count = vacant_houses_with_owners.shape[0]
+def _(bmore_vacant_owners, vacant_houses_with_owners_df):
+    total_vacant_owners_count = vacant_houses_with_owners_df.shape[0]
     bmore_vacant_owners_count = bmore_vacant_owners.shape[0]
     non_bmore_vacant_owners_count = total_vacant_owners_count - bmore_vacant_owners_count
     local_ownership_rate = round((bmore_vacant_owners_count / total_vacant_owners_count) * 100, 2)
@@ -228,14 +213,8 @@ def _():
     import polars as pl
 
     data_path = mo.notebook_location() / "raw-data"
-    vacant_building_notices_df = pl.read_csv(str(data_path / "vacant_building_notices.csv"))
-    real_property_data_df = pl.read_csv(
-        str(data_path / "real_property_data.csv"),
-        infer_schema_length=10000
-    )
-
-
-    return mo, real_property_data_df, vacant_building_notices_df
+    vacant_houses_with_owners_df = pl.read_csv(str(data_path / "vacant_houses_with_owners.csv"))
+    return mo, vacant_houses_with_owners_df
 
 
 if __name__ == "__main__":
