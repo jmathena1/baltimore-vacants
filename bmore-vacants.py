@@ -233,6 +233,8 @@ def _():
         str(data_path / "real_property_data.csv"),
         infer_schema_length=10000
     )
+
+
     return mo, real_property_data_df, vacant_building_notices_df
 
 
